@@ -82,7 +82,7 @@ int main() {
 		printf(ANSI_BLUE);
 		printf("\nTHE END\n");
 		printf(RESET_TEXT_FORMAT);
-		printf("\nyou solved all the puzzle, a remarkable achievement\nthank you for playing\n- cau\210");	
+		printf("\nyou solved all the puzzles, a remarkable achievement\nthank you for playing\n- cau\210");	
 	}	
 	return 0;
 }
