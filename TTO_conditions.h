@@ -149,31 +149,40 @@ int completed(BOARD board) {
 // Condition to the secret final level
 int final_cond(int quadrants[N_QUADRANTS]) {
 	int i, j, check_green = 0, check_red = 0;
+	
+	// Check rows of quadrants for green quadrants. If there's none in a row, it must be all red
 	for (i = 0; i < N_QUADRANTS; i++) {
 		if (quadrants[i] == LVL_COMPLETED) {
 			check_green += 1;
 			if (check_green == QUADRANT_MATRIX) return 0;	
 		} 
-		if (i % QUADRANT_MATRIX == QUADRANT_MATRIX - 1) {
+		// Reset check_green and set check_red when the row ends
+		if (i % QUADRANT_MATRIX == QUADRANT_MATRIX - 1) { 
 			if (!check_green) check_red = 1;
 			check_green = 0;
 		}
 	}
 	if (check_red) return 1;
+	
+	// Check columns of quadrants for green quadrants
 	i = 0;
 	for (j = 0; j < N_QUADRANTS; j++) {
 		if (quadrants[i] == LVL_COMPLETED) {
 			check_green += 1;
 			if (check_green == QUADRANT_MATRIX) return 0;	
 		} 
+		// Reset check_green and set check_red when the column ends
 		if (i + QUADRANT_MATRIX >= N_QUADRANTS) {
 			if (!check_green) check_red = 1;
 			check_green = 0;
-			i -= QUADRANT_MATRIX * (QUADRANT_MATRIX - 1) - 1;
+			i -= QUADRANT_MATRIX * (QUADRANT_MATRIX - 1) - 1; // Arithmetics to go the quadrant that starts a new column
 		}
-		else i += QUADRANT_MATRIX;
+		// Increment index to the next row inside the column
+		else i += QUADRANT_MATRIX; 
 	}
 	if (check_red) return 1;
+	
+	// Check first diagonal of quadrants for green quadrants
 	i = 0;
 	for (j = 0; j < QUADRANT_MATRIX; j++) {
 		if (quadrants[i] == LVL_COMPLETED) {
@@ -184,6 +193,8 @@ int final_cond(int quadrants[N_QUADRANTS]) {
 	}
 	if (!check_green) check_red = 1;
 	check_green = 0;
+	
+	// Check second diagonal of quadrants for green quadrants
 	i = QUADRANT_MATRIX - 1;
 	for (j = 0; j < QUADRANT_MATRIX; j++) {
 		if (quadrants[i] == LVL_COMPLETED) {
@@ -193,6 +204,7 @@ int final_cond(int quadrants[N_QUADRANTS]) {
 		i += QUADRANT_MATRIX - 1;
 	}
 	if (!check_green || check_red) return 1;
+	
 	return 0;
 }
 
