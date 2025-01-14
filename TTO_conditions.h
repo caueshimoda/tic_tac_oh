@@ -3,7 +3,7 @@
 #include "TTO_structures.h"
 
 
-// Returns the board's winner or 0 if there's no winner
+// Returns the board winner or 0 if there's no winner
 int winner(BOARD board) {
 	int row, col, check = 1;
 	char ref;
@@ -97,6 +97,7 @@ int color_cond(BOARD board) {
 int summation_cond(BOARD board) {
 	int row, col, sum, sum_index = 0;
 	
+	// Check all rows current sums and compare them with their respective target sums
 	for (row = 0; row < board.matrix; row++) {
 		sum = 0;
 		for (col = 0; col < board.matrix; col++) {
@@ -108,6 +109,7 @@ int summation_cond(BOARD board) {
 		sum_index ++;
 	}
 	
+	// Check all columns current sums and compare them with their respective target sums
 	for (col = 0; col < board.matrix; col++) {
 		sum = 0;
 		for (row = 0; row < board.matrix; row++) {
@@ -134,7 +136,7 @@ int completed(BOARD board) {
 		if (!summation_cond(board)) return 0;
 	}
 	
-	// Special condition when there's no target, and the level must end as a draw to be completed (no free slots and no winner)
+	// Special condition when there's no target: the level must end as a draw to be completed (no free slots and no winner)
 	if (board.target == ' ') {
 		if (!board.free_slots) {
 			if (!winner(board)) return 1;

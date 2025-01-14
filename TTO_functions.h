@@ -102,7 +102,7 @@ int in_matrix(int row, int col, int matrix) {
 
 
 // Returns 0 if there's a special element in the given position, and 1 if there's not any
-// The special elements taking into account don't include green and red slots, therefore sp[i].type < GREEN_SLOT 
+// The special elements taken into account don't include green or red slots, therefore sp[i].type < GREEN_SLOT 
 int no_special(SPECIAL sp[MAX_SP], int row, int col, int qty) {
 	int i;
 	for (i = 0; i < qty; i++) {
@@ -114,7 +114,7 @@ int no_special(SPECIAL sp[MAX_SP], int row, int col, int qty) {
 }
 
 
-// Draws part of the current row from the given string with the given color when applicable
+// Draws part of the current row from the given string, with the given color when applicable
 void draw_row(char str[STR_SIZE], char c, char color[COLOR_SIZE], int state) {
 	int i;
 	
@@ -332,14 +332,14 @@ void draw_board(BOARD board, int transition) {
 }
 
 
-// Cleans a slot and draws the transition if needed
+// Clears a slot and draws the transition if needed
 void clear_slot(BOARD *board, int row, int col, int transition) {
 	if (transition) draw_board(*board, 1);
 	board->placed_piece[row][col] = ' ';
 }
 
 
-
+// Moves a piece from a slot to another and clears the first slot
 void move_piece(BOARD *board, int row, int col, int previous_row, int previous_col, int transition) {
 	int i;
 	
@@ -452,14 +452,14 @@ void special_in_common(BOARD *board, int row, int col, void (*function)(BOARD *b
 }
 
 
-// Applies the `swap_piece` function to all adjacent pieces
+// Applies the "swap_piece" function to all adjacent pieces
 BOARD transmute(BOARD board, int row, int col) {
 	special_in_common(&board, row, col, swap_piece);
 	return board;
 }
 
 
-// Updates bomb timer and activates its power when ready to explode
+// Updates bomb timer and activates bomb power when ready to explode
 BOARD activate_bomb(BOARD board, int row, int col) {
 	int i = 0;
 	
@@ -482,7 +482,7 @@ BOARD activate_bomb(BOARD board, int row, int col) {
 	
 	// If the timer reaches 0, activate the bomb's effect
 	if (board.special[i].timer == 0) {
-		// Clear all adjacent slots using the `clear_slot` function
+		// Clear all adjacent slots using the "clear_slot" function
 		special_in_common(&board, row, col, clear_slot);
 		
 		// Reset the bomb timer to its original value
@@ -559,7 +559,7 @@ BOARD move_pman(BOARD board, int row, int col) {
 }
 
 
-// Adjusts the coordinate to bring it one step closer to `target`
+// Adjusts the provided coordinate to bring it one step closer to "target"
 int update_magnetized(int target, int coord) {
 	if (target > coord) return coord + 1;
 	if (target < coord) return coord - 1;
@@ -587,7 +587,7 @@ void magnetize(BOARD *board, int magnet_row, int magnet_col, int current_row, in
 			}
 		}
 		
-		// If vertcal distance isn't greater or vertical movement wasn't possible, try horizontal movement
+		// If vertical distance isn't greater or vertical movement wasn't possible, try horizontal movement
 		if (!moved) {
 			if (board->placed_piece[current_row][target_col] == ' ') {
 				move_piece(board, current_row, target_col, current_row, current_col, 1);
@@ -602,7 +602,7 @@ void magnetize(BOARD *board, int magnet_row, int magnet_col, int current_row, in
 
 
 // Activates the magnet effect with the following rules:
-// Pieces closer to the magnet move first, always one slot at a time, with diagonal movement allowed
+// Pieces closer to the magnet move first, always one slot at a time; diagonal movement is allowed
 // Vertical movement is prioritized only if the vertical distance is greater, otherwise horizontal movement is prioritized
 // A piece only moves if it can decrease its Manhattan distance to the magnet, and if there's available space for it to move
 BOARD activate_magnet(BOARD board, int magnet_row, int magnet_col) {
@@ -631,12 +631,12 @@ BOARD activate_magnet(BOARD board, int magnet_row, int magnet_col) {
 }
 
 
-// Returns the validity of the move (-1 = exit, 0 = invalid, 1 = valid, 2 = level map, 3 = occupied position)
+// Returns the validity of the move (-1 = exit, 0 = invalid, 1 = valid, 2 = levels map, 3 = occupied position)
 int valid_move(char move[INPUT_SIZE], BOARD board) {
 	// Check if the input is an exit command
 	if (move[0] == '0') return -1;
 	
-	// Check if the input is a command to see the level map
+	// Check if the input is a command to see the levels map
 	if (move[0] == 'M') return 2;
 	
 	// Validate the column input (must be within 'A' to the last column letter)
@@ -663,7 +663,7 @@ int play(char move[INPUT_SIZE], BOARD *board) {
 	// Exit the game if the move indicates an exit command
 	if (valid < 0) exit(0);
 	
-	// Return 2 for displaying the level map
+	// Return 2 for displaying the levels map
 	if (valid == 2) return 2; 
 	
 	// Clear input buffer to ensure clean user interaction
@@ -681,7 +681,7 @@ int play(char move[INPUT_SIZE], BOARD *board) {
 		// Make the move on the board
 		board -> placed_piece[move[ROW]][move[COLUMN]] = board -> next;
 		
-		// Handle the swapping logic for the next piece as following:
+		// Handle the swapping logic for the next piece as follows:
 		// 0: no swapping, so the pieces always alternate and the swap condition stays the same
 		// 1 and 3: there's a transmuter or swap condition and the piece is the first of its kind, so the next one is the same piece and the swap condition increases
 		// 2 and 4: there's a transmuter or swap condition and the piece is the second of its kind, so the next one is the opposite piece and the swap condition decreases
@@ -808,7 +808,7 @@ int game_loop (BOARD *board, int activate, int last_lvl) {
 	// Check if we are not in the secret last level
 	if (last_lvl <= MAX_LVL) {
 		// If there's a winner or no free slots left, the game is lost (because the main function already tested if the level was completed)
-		if (winner(*board) || !board->free_slots){
+		if (winner(*board) || !board->free_slots){ // "winner()" from TTO_conditions.h
 			board->state = LOST; // Update game state to LOST
 			draw_board(*board, 0); // Draw the final board state (will be printed in red)
 			printf("\n");
