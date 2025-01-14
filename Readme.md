@@ -8,7 +8,7 @@ The terminal you run the game on has to be ANSI compatible for it to work proper
 If it prints weird characters and no colors, then it must not be ANSI compatible. 
 
 tic tac oh... is a puzzle game that takes inspiration from tic tac toe, but it's not a competition between two players.  
-It's a single player game where you place all the pieces, X's and O's, in the board, trying to acvhieve all the
+It's a single player game where you place all the pieces, X's and O's, on the board, trying to achieve all the
 conditions to complete each level. 
 What are those conditions? It's up to you to find out. 
 
