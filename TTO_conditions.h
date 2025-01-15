@@ -10,7 +10,7 @@ int winner(BOARD board) {
 	
 	// Check all rows for a full sequence of X's or O's
 	for (row = 0; row < board.matrix; row++) {
-		ref = board.placed_piece[row][0]; // sets the reference as the piece on the first column of the current row
+		ref = board.placed_piece[row][0]; // Set the reference as the piece on the first column of the current row
 		if (ref == 'X' || ref == 'O'){
 			for (col = 1; col < board.matrix; col++) {
 				if (board.placed_piece[row][col] != ref) break;
@@ -23,7 +23,7 @@ int winner(BOARD board) {
 	
 	// Check all columns for a full sequence of X's or O's
 	for (col = 0; col < board.matrix; col++) {
-		ref = board.placed_piece[0][col]; // sets the reference as the piece on the first row of the current column
+		ref = board.placed_piece[0][col]; // Set the reference as the piece on the first row of the current column
 		if (ref == 'X' || ref == 'O'){
 			for (row = 1; row < board.matrix; row++) {
 				if (board.placed_piece[row][col] != ref) break;
@@ -97,7 +97,7 @@ int color_cond(BOARD board) {
 int summation_cond(BOARD board) {
 	int row, col, sum, sum_index = 0;
 	
-	// Check all rows current sums and compare them with their respective target sums
+	// Check all rows and their current sums and compare them with their respective target sums
 	for (row = 0; row < board.matrix; row++) {
 		sum = 0;
 		for (col = 0; col < board.matrix; col++) {
@@ -109,7 +109,7 @@ int summation_cond(BOARD board) {
 		sum_index ++;
 	}
 	
-	// Check all columns current sums and compare them with their respective target sums
+	// Check all columns and their current sums and compare them with their respective target sums
 	for (col = 0; col < board.matrix; col++) {
 		sum = 0;
 		for (row = 0; row < board.matrix; row++) {

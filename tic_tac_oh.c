@@ -42,6 +42,11 @@ int main() {
 			last_lvl = 1;
 			save(last_lvl); //from TTO_functions.h
 		}
+		if (last_lvl == 1) {
+			printf("\nwelcome to tic tac oh...\neach level has a special mechanic or condition that you have to figure out to complete it\n");
+			printf("although inspired by tic tac toe, it's a single player puzzle game where you alone put all the pieces on the board\n");
+			printf("see the levels map to check your progress and how many levels you still have to play\n");
+		}
 		initialize_lvls_state(lvls, last_lvl); //from TTO_functions.h
 		BOARD board; //from TTO_structures.h
 		choice = last_lvl;
@@ -50,7 +55,7 @@ int main() {
 		// Main game loop: increments last_lvl when a level is completed until it surpasses MAX_LEVEL
 		while (last_lvl <= MAX_LVL) {
 			while (!completed(board)){ //from TTO_conditions.h
-				// Call map function when player chooses to see the levels map. The "cal_menu" argument set to 1 makes it call the map menu
+				// Call map function when player chooses to see the levels map. The "call_menu" argument set to 1 makes it call the map menu
 				if (state > 1) { // state > 1: see levels map
 					choice = map(last_lvl, lvls, 1); //from TTO_functions.h
 					if (choice) {
@@ -58,12 +63,14 @@ int main() {
 					}
 					state = 0;
 				} 
-				else state = game_loop(&board, state, last_lvl); //from TTO_functions.h	
+				// If the state is 1 or 0, the player input was either a move or an invalid input
+				// Either way, it'll activate the game loop and update the state to the next turn
+				else state = game_loop(&board, state, last_lvl); //from TTO_functions.h
 			}
 			
 			// Draw board in green after a level is completed 
 			// Changing the state to WON ensures the draw_board function will print it in green
-			// The argument 0 says it's not a transition drawing
+			// The argument "transition" set to 0 says it's not a transition drawing
 			board.state = WON;
 			draw_board(board, 0); //from TTO_functions.h
 			printf("\n");
@@ -91,7 +98,7 @@ int main() {
 			quadrants[i] = LVL_COMPLETED;
 		}
 		
-		// When all the levels are completed, there's still a secret one to solve
+		// After all the levels are completed, there's still a secret one to solve
 		while (1) {
 			state = 0;
 			choice = map(last_lvl, lvls, 1);
@@ -124,7 +131,7 @@ int main() {
 			if (final_cond(quadrants)) break; //from TTO_conditions.h
 		}
 		
-		// Draw the map one last time, with "cal_menu" argument set to 0 so it doesn't call the map menu
+		// Draw the map one last time, with "call_menu" argument set to 0 so it doesn't call the map menu
 		map(last_lvl, lvls, 0);
 		printf(ANSI_BLUE);
 		printf("\nTHE END\n");

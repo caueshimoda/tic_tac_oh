@@ -63,6 +63,7 @@ char opposite_sprite(char c){
 int sprite_color(char target, char current, SPECIAL sp[MAX_SP], int row, int col, int sp_qty) {
 	int i, color = 0;
 	
+	// Check each special element from the special array to find if there's one with the provided coordinates
 	for (i = 0; i < sp_qty; i++) {
 		if (sp[i].row == row && sp[i].column == col) {
 			if (sp[i].type == PURSUER) {
@@ -77,13 +78,16 @@ int sprite_color(char target, char current, SPECIAL sp[MAX_SP], int row, int col
 				if (!color) color = MAGNET_COLOR;
 				else {
 					color += 3;
-					break;
+					return color;
 				} 
 			}
 		}
 	}
 	
 	if (color) return color;
+	
+	// If there was no special element in the provided position and there's a target sprite, 
+	// check if the current sprite is the target or the opposite sprite and return the appropriate color
 	if (target != ' ') {
 		if (current == target) return TARGET_COLOR;
 		if (current == opposite_sprite(target)) return WRONG_COLOR;
@@ -152,7 +156,7 @@ void draw_row(char str[STR_SIZE], char c, char color[COLOR_SIZE], int state) {
 void update_str(char str[STR_SIZE], char c) {
 	int i;
 	
-	// The string will consist entirely of # if the char received is #
+	// The string will consist entirely of '#' if the char received is '#'
 	if (c == '#') {
 		for (i = 0; i < STR_SIZE; i++){
 			str[i] = '#';
@@ -161,7 +165,7 @@ void update_str(char str[STR_SIZE], char c) {
 	
 	else {
 		// The char 'e' will be the divider. If the draw_board function needs to print the column index, then 'e' will simply be a space
-		// Otherwise, it'll be a # to properly separate the slots
+		// Otherwise, it'll be a '#' to properly separate the slots
 		char e; 
 		if (c >= 'A' && c < 'A' + MAX_MATRIX) e = ' ';
 		else e = '#';
